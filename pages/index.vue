@@ -1,95 +1,80 @@
 <template>
-  <div class="mt-5">
-    <div v-if="loading">Loading</div>
-    <div v-else style="display: flex; justify-content: space-between;">
-      <b-container>
-        <b-row class="mx-5 px-5">
-          <b-col lg="3" class="my-1">
-             <b-form-group label="Positions">
-              <b-form-radio-group class="mt-lg-2" v-model="position">
-                <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
-                <b-form-radio v-on:change="filterByOptions" v-for="p in positions" :key="p" inline :value="p"> {{p}}</b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-          <b-col lg="3" class="my-1">
-            <b-form-group label="Stat Types">
-              <b-form-radio-group class="mt-lg-2" v-model="statType">
-                <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
-                <b-form-radio v-on:change="filterByOptions" v-for="s in statTypes" :key="s" inline :value="s"> {{s}}</b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-          <b-col lg="3" class="my-1">
-            <b-form-group label="Market Status">
-              <b-form-radio-group class="mt-lg-2" v-model="marketStatus">
-                <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
-                <b-form-radio v-on:change="filterByOptions" inline value="open"> Open</b-form-radio>
-                <b-form-radio v-on:change="filterByOptions" inline value="closed"> Suspended</b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-          <b-col lg="3" class="my-1">
-            <b-form-group
-              label="Per page"
-              label-for="per-page-select"
-              label-cols-sm="6"
-              label-cols-md="4"
-              label-cols-lg="3"
-              label-align-sm="right"
-              label-size="sm"
-              class="mb-0"
-            >
-              <b-form-select
-                id="per-page-select"
-                v-model="perPage"
-                :options="pageOptions"
-                size="sm"
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="12" class="mx-5 mt-1 mb-3">
-            <b-form-group
-              label-for="filter-input"
-              label-cols-sm="3"
-              label-align-sm="right"
-              label-size="sm"
-              class="mb-0"
-            >
-              <b-input-group size="sm">
-                <b-form-input
-                  id="filter-input"
-                  v-model="name"
-                  type="search"
-                  placeholder="Search By player name or team name"
-                ></b-form-input>
-                <b-input-group-append>
-                  <b-button @click="filterByOptions">search</b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-table
-          :items="data"
-          :fields="fields"
-          :per-page="perPage"
-          stacked="md"
-          show-empty
-          small
-          @filtered="onFiltered"
+<b-container>
+    <h1 class="my-5" style="text-align: center">NBA Player Statistics</h1>
+    <b-row class="mx-5 px-5">
+      <b-col lg="3" class="my-1">
+          <b-form-group label="Positions">
+          <b-form-radio-group class="mt-lg-2" v-model="position">
+            <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
+            <b-form-radio v-on:change="filterByOptions" v-for="p in positions" :key="p" inline :value="p"> {{p}}</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+      </b-col>
+      <b-col lg="3" class="my-1">
+        <b-form-group label="Stat Types">
+          <b-form-radio-group class="mt-lg-2" v-model="statType">
+            <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
+            <b-form-radio v-on:change="filterByOptions" v-for="s in statTypes" :key="s" inline :value="s"> {{s}}</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+      </b-col>
+      <b-col lg="3" class="my-1">
+        <b-form-group label="Market Status">
+          <b-form-radio-group class="mt-lg-2" v-model="marketStatus">
+            <b-form-radio v-on:change="filterByOptions" inline value=""> All</b-form-radio>
+            <b-form-radio v-on:change="filterByOptions" inline value="open"> Open</b-form-radio>
+            <b-form-radio v-on:change="filterByOptions" inline value="closed"> Suspended</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+      </b-col>
+      <b-col lg="3" class="my-1">
+        <b-form-group
+          label="Per page"
+          label-for="per-page-select"
+          label-cols-sm="6"
+          label-cols-md="4"
+          label-cols-lg="3"
+          label-align-sm="right"
+          label-size="sm"
+          class="mb-0"
         >
-          <template #cell(actions)="row">
-            <b-button size="sm" @click="updateMarketStatus(row.item)">
-              {{ row.item.marketStatus === 'open' ? 'Disable' : 'Enble' }} Market
-            </b-button>
-          </template>
-        </b-table>
-      </b-container>
+          <b-form-select
+            id="per-page-select"
+            v-model="perPage"
+            :options="pageOptions"
+            size="sm"
+          ></b-form-select>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <div class="mt-2 mb-4" style="display: flex; justify-content: space-between">
+      <b-form-input
+        id="filter-input"
+        v-model="name"
+        type="search"
+        placeholder="Search By player name or team name"
+        style="width: 50%"
+        @input="filterByOptions"
+      ></b-form-input>
+      <b-button variant="danger" @click="refreshData">Refresh</b-button>
     </div>
-  </div>
+
+    <b-table
+      :items="data"
+      :fields="fields"
+      :per-page="perPage"
+      show-empty
+      small
+      outlined
+      @filtered="onFiltered"
+    >
+      <template #cell(actions)="row">
+        <b-button :variant="row.item.marketStatus === 'open' ? '': 'primary'" size="sm" @click="updateMarketStatus(row.item)" style="width: 75%">
+          {{ row.item.marketStatus === 'open' ? 'Disable' : 'Enble' }} Market
+        </b-button>
+      </template>
+    </b-table>
+  </b-container>
 </template>
 <script>
   import _ from 'lodash';
@@ -124,7 +109,6 @@
           ],
           perPage: 20,
           pageOptions: [20, 50, 200, { value: 500, text: "Show a lot" }],
-          loading: true,
         }
       },
       created() {
@@ -151,13 +135,22 @@
         },
         updateMarketStatus(row) {
           this.$store.dispatch('updateData', row)
+          this.filterByOptions()
+        },
+        refreshData() {
+          this.$store.dispatch('setData')
+          this.name = ''
+          this.position = ''
+          this.statType = ''
+          this.marketStatus = ''
+          this.data = this.$store.state.data
+          this.perPage = 20
         },
         async getSportsList() {
-            this.$store.dispatch('getData')
+            this.$store.dispatch('setData')
             this.data = this.$store.state.data
             this.positions = Object.keys(_.groupBy(this.data, 'position'))
             this.statTypes = Object.keys(_.groupBy(this.data, 'statType'))
-            this.loading = false
         },
         onFiltered(filteredItems) {
           this.totalRows = filteredItems.length

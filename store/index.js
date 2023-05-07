@@ -10,7 +10,7 @@ const mutations = {
     state.isModal = true
     state.modalType = value
   },
-  async GET_DATA (state) {
+  async SET_DATA (state) {
     let grouped = Object.values(alternatesData.reduce((a,c)=> {
       let i = a[JSON.stringify([c.playerId, c.statTypeId])] ??= 
               {playerId: c.playerId, statTypeId: c.statTypeId, low: c.line, high: c.line, marketStatus: 'open'};
@@ -54,9 +54,9 @@ const mutations = {
   }
 };
 const actions = {
-  getData({ commit }) {
+  setData({ commit }) {
     return new Promise(() => {
-      commit('GET_DATA')
+      commit('SET_DATA')
     })
   },
   updateData({commit}, row){
