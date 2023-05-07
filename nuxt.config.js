@@ -59,7 +59,7 @@ export default {
       },
     ],
     '@nuxtjs/style-resources',
-    "@nuxtjs/auth",
+    // "@nuxtjs/auth",
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
   ],
