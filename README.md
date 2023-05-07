@@ -1,7 +1,7 @@
 
 
 
-<h1 text-alighn="center">Home Assessment</h1>
+<h1 style="text-align: center;">Home Assessment</h1>
 
 ## Requirement
 ~/data/project.pdf
