@@ -3,7 +3,6 @@
     <div v-if="loading">Loading</div>
     <div v-else style="display: flex; justify-content: space-between;">
       <b-container>
-        <!-- User Interface controls -->
         <b-row class="mx-5 px-5">
           <b-col lg="3" class="my-1">
              <b-form-group label="Positions">
@@ -73,7 +72,6 @@
             </b-form-group>
           </b-col>
         </b-row>
-
         <b-table
           :items="data"
           :fields="fields"
@@ -84,14 +82,13 @@
           @filtered="onFiltered"
         >
           <template #cell(actions)="row">
-            <b-button size="sm" @click="demo(row.item, row.index, $event.target)">
+            <b-button size="sm" @click="updateMarketStatus(row.item)">
               {{ row.item.marketStatus === 'open' ? 'Disable' : 'Enble' }} Market
             </b-button>
           </template>
         </b-table>
       </b-container>
     </div>
-
   </div>
 </template>
 <script>
@@ -100,7 +97,6 @@
       name: "Home",
       data() {
         return {
-          // radioo: '',
           name: '',
           data : [],
           positions: [],
@@ -133,11 +129,9 @@
       },
       created() {
           this.getSportsList()
-          // console.log(this.$store.state)
       },
       computed: {
         sortOptions() {
-          // Create an options list from our fields
           return this.fields
             .filter(f => f.sortable)
             .map(f => {
@@ -154,22 +148,9 @@
                 .filter(e => e.playerName.toLowerCase().includes(this.name.toLowerCase()) 
                             || e.teamAbbr.toLowerCase().includes(this.name.toLowerCase()) 
                             || e.teamNickname.toLowerCase().includes(this.name.toLowerCase()))
-
         },
-
-        demo(row, b, c) {
-    // row.marketStatus = 'closed'
-
-          //  let index = this.data.findIndex((x) => x.playerId === row.playerId.id && x.statTypeId === row.statTypeId);
-          //  console.log(this.data)
-    // this.data[index].marketStatus = 'closed'
+        updateMarketStatus(row) {
           this.$store.dispatch('updateData', row)
-
-          // console.log(a)
-          // console.log(b)
-          // console.log(c)
-          // a.marketStatus = 'closed'
-
         },
         async getSportsList() {
             this.$store.dispatch('getData')
@@ -177,10 +158,9 @@
             this.positions = Object.keys(_.groupBy(this.data, 'position'))
             this.statTypes = Object.keys(_.groupBy(this.data, 'statType'))
             this.loading = false
-          },
+        },
         onFiltered(filteredItems) {
           this.totalRows = filteredItems.length
-          // this.currentPage = 1
         }
       },
   }

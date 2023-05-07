@@ -1,60 +1,19 @@
-    var propsData = require('@/data/props.json')
-    const alternatesData = require('@/data/alternates.json')
+const propsData = require('@/data/props.json')
+const alternatesData = require('@/data/alternates.json')
 
-// const state = getDefaultState()
 const state = () => ({
-  // propsData: propsData,
-  // alternatesData: alternatesData,
   data: [],
-  isSidebarToggled: true,
-  isLeftPanelToggled: true,
-  isRightPanelToggled: false,
-  isModal: false,
-  modalType: '',
-  isMobileView: true,
 });
 
 const mutations = {
-  setLeftPanelToggle(state) {
-    return (state.isLeftPanelToggled = !state.isLeftPanelToggled);
-  },
-  setRightPanelToggle(state){
-    return (state.isRightPanelToggled = !state.isRightPanelToggled);
-  },
-  // sidebar toggle handler
-  setSidebarToggle(state) {
-    return (state.isSidebarToggled = !state.isSidebarToggled);
-  },
-  // modal handler
-  showModal(state) {
-    state.isModal = true;
-
-  },
-  closeModal(state) {
-    state.isModal = false;
-    state.modalType = ''
-  },
-  logout(state) {
-    Object.assign(state, getDefaultState())
-  },
-  setDevice(state, value){
-    state.device = value
-    if (value.isMobile || value.isTablet){
-      state.isLeftPanelToggled = false;
-      state.isRightPanelToggled = false;
-    }
-  },
   SET_MODAL_TYPE(state, value){
     state.isModal = true
     state.modalType = value
   },
   async GET_DATA (state) {
-    // state.data = propsData
-    console.log('ahsdfe')
-    // state.propsData = ['p','l']
-    // state.alternatesData = alternatesData
     let grouped = Object.values(alternatesData.reduce((a,c)=> {
-      let i = a[JSON.stringify([c.playerId, c.statTypeId])] ??= {playerId: c.playerId, statTypeId: c.statTypeId, low: c.line, high: c.line, marketStatus: 'open'};
+      let i = a[JSON.stringify([c.playerId, c.statTypeId])] ??= 
+              {playerId: c.playerId, statTypeId: c.statTypeId, low: c.line, high: c.line, marketStatus: 'open'};
       if ( c. overOdds < 0.4 && c.pushOdds < 0.4 && c.underOdds < 0.4 )
         i.marketStatus = 'closed'
       if (i.low > c.line)
@@ -102,19 +61,10 @@ const actions = {
   },
   updateData({commit}, row){
     commit('UPDATE_DATA', row)
-
-
-  },
-
-  
-  setModalType({commit}, role){
-    commit('SET_MODAL_TYPE', role)
   },
 }
 const getDefaultState = () => {
   return {
-    isSidebarToggled: true,
-    isModal: false,
   }
 };
 
@@ -122,5 +72,4 @@ export default {
   state,
   mutations,
   actions
-  // getters
 }

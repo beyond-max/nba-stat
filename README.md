@@ -1,15 +1,11 @@
 
 
 
+<h1 center>Run Project</h1>
 
-## Build Setup
-https://trello.com/b/F6FmKsJV/vue-front-end
-
-```bash
-# install dependencies
+## Module Install
 $ yarn install
 
-# serve with hot reload at localhost:3000
 $ yarn dev
 
 # build for production and launch server
