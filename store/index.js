@@ -14,7 +14,7 @@ const mutations = {
     let grouped = Object.values(alternatesData.reduce((a,c)=> {
       let i = a[JSON.stringify([c.playerId, c.statTypeId])] ??= 
               {playerId: c.playerId, statTypeId: c.statTypeId, low: c.line, high: c.line, marketStatus: 'open'};
-      if ( c. overOdds < 0.4 && c.pushOdds < 0.4 && c.underOdds < 0.4 )
+      if ( c.overOdds < 0.4 && c.pushOdds < 0.4 && c.underOdds < 0.4 )
         i.marketStatus = 'closed'
       if (i.low > c.line)
         i.low = c.line
